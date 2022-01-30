@@ -4,13 +4,14 @@ import { TodoHeader } from "../TodoHeader";
 import { TodoCounter } from "../TodoCounter";
 import { TodoSearch } from "../TodoSearch";
 import { TodoList } from "../TodoList";
-import { TodoError } from "../TodoError/TodoError";
-import { TodoLoading } from "../TodoLoading/TodoLoading";
-import { EmptyTodo } from "../EmptyTodo/EmptyTodo";
+import { TodoError } from "../TodoError";
+import { TodoLoading } from "../TodoLoading";
+import { EmptyTodo } from "../EmptyTodo";
 import { TodoItem } from "../TodoItem";
 import { Modal } from "../Modal";
 import { TodoForm } from "../TodoForm";
 import { CreateTodoButton } from "../CreateTodoButton";
+import { EmptySearchResults } from "../EmptySearchResults";
 
 function App() {
   const {
@@ -43,11 +44,30 @@ function App() {
       <TodoList
         error={error}
         loading={loading}
+        totalTodos={totalTodos}
         searchedTodos={searchedTodos}
-        onError={<TodoError />}
-        onLoading={<TodoLoading />}
-        onEmpty={<EmptyTodo />}
-        render={(todo, key) => {
+        searchText={searchValue}
+        onError={() => <TodoError />}
+        onLoading={() => <TodoLoading />}
+        onEmpty={() => <EmptyTodo />}
+        onEmptySearchedResults={searchText => (
+          <EmptySearchResults
+            searchText={searchText}
+          />
+        )}
+        // render={(todo, key) => {
+        //   return (
+        //     <TodoItem
+        //       key={key}
+        //       text={todo.text}
+        //       completed={todo.complete}
+        //       onComplete={() => completeTodo(key)}
+        //       onDelete={() => deleteTodo(key)}
+        //     />
+        //   );
+        // }}
+      >
+        {(todo, key) => {
           return (
             <TodoItem
               key={key}
@@ -58,7 +78,7 @@ function App() {
             />
           );
         }}
-      />
+      </TodoList>
       {openModal && (
         <Modal>
           <TodoForm
